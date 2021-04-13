@@ -548,6 +548,7 @@ export default {
     // console.log(this.coronaJSON);
     // })
 
+// 구조 해석용 샘플
     fillData() {
       this.chartdata = {
         // Data for the y-axis of the chart
