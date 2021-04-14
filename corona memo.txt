@@ -1,0 +1,145 @@
+
+    testApi: function() {
+      this.$axios
+        .get("/api/all", {})
+        .then(res => {
+          alert("성공 : " + res.data);
+          this.test = "내서버 성공";
+          // window.location.href = "/home"
+        })
+        .catch(err => {
+          alert("실패 : " + err);
+          this.test = "내서버 실패";
+        });
+    },
+    test2: function() {
+      axios({
+        url: "https://api.corona-19.kr/korea/country/new",
+        method: "get",
+        crossDomain: true,
+        changeOrigin: true,
+        contentType: "application/json",
+        crossOrigin: "anonymous",
+        crossOriginLoading: "https://api.corona-19.kr/korea/country/new",
+        withcredentials: true,
+        header: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          "Content-Type": "application/json"
+        },
+        credentials: "same-origin",
+        params: {
+          serviceKey: this.mykey
+        },
+        timeout: 5000
+      })
+        .then(res => {
+          alert("성공" + res);
+        })
+        .catch(err => {
+          alert("실패" + err);
+        });
+    },
+
+    getCorona: function() {
+      axios
+        .get("/coronaApi", {
+          headers: {
+            "Access-Control-Allow-Headers": "application/json; charset = utf-8",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": true
+          },
+          withCredentials: true,
+
+          params: { serviceKey: this.mykey },
+          timeout: 5000 /* 1초 이내에 응답이 없으면 에러 처리*/
+        })
+        .then(res => {
+          console.log(res.data);
+          this.coronaJSON = res;
+        })
+        .catch(e => {
+          alert("실패 : " + e);
+          this.test = "coronaApi 실패";
+        });
+    },
+
+
+
+
+    publicApi2: function() {
+      var xhr = new XMLHttpRequest();
+      var url =
+        "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"; /*URL*/
+      var queryParams =
+        "?" +
+        encodeURIComponent(this.serviceKey) +
+        "=" +
+        "서비스키"; /*Service Key*/
+      queryParams +=
+        "&" + encodeURIComponent("pageNo") + "=" + encodeURIComponent("1"); /**/
+      queryParams +=
+        "&" +
+        encodeURIComponent("numOfRows") +
+        "=" +
+        encodeURIComponent("10"); /**/
+      queryParams +=
+        "&" +
+        encodeURIComponent("startCreateDt") +
+        "=" +
+        encodeURIComponent(this.tempDateEnd); /**/
+      queryParams +=
+        "&" +
+        encodeURIComponent("endCreateDt") +
+        "=" +
+        encodeURIComponent(this.tempDateStart); /**/
+      xhr.open("GET", url + queryParams);
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4) {
+          alert(
+            "Status: " +
+              this.status +
+              "nHeaders: " +
+              JSON.stringify(this.getAllResponseHeaders()) +
+              "nBody: " +
+              this.responseText
+          );
+        }
+      };
+
+      xhr.send("");
+    },
+
+    // 코로나 api 바로 받아오기( client - external API)    추후 controller req- external Api - DB입력 - client 로 제공
+    getPubCorona: function(key) {
+      axios
+        .get("/openapi", {
+          params: {
+            serviceKey: key,
+            pageNo: 1,
+            numOfRows: 10,
+            startCreateDt: this.tempDateEnd,
+            endCreateDt: this.tempDateStart
+          },
+          // headers: {
+          //   "Access-Control-Allow-Headers":
+          //     "application/xml; charset = utf-8",
+          //   "Access-Control-Allow-Methods": "OPTIONS,HEAD,GET",
+          //   "Access-Control-Allow-Origin": "http://openapi.data.go.kr/",
+          //   Host: "http://openapi.data.go.kr/",
+          //   "Access-Control-Allow-Credentials": true
+          // },
+          timeout: 2500 /* 1초 이내에 응답이 없으면 에러 처리*/
+        })
+        .then(res => {
+          // var xml = response.data;
+          // var json = convert.xml2json(xml, { compact: true });
+          // this.coronaJSON = JSON.parse(json);
+          console.log("코로나 데이터 : " + res.data);
+        })
+        .catch(err => {
+          console.log("===err====" + err);
+        });
+    },

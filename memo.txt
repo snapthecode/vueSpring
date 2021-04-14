@@ -1,0 +1,45 @@
+/package.json 에 regex로 맞는 파일명만 테스트 하는 룰
+"test:only": "vue-cli-service test:unit --testPathPattern=user.store",
+
+/일반 테스트
+"test": "jest --watch",
+
+/ 테스트 명령어
+jest 또는 npm t
+
+
+
+/ package.json 맨밑에 짜른것들
+,
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      ".*\\.(vue)$": "vue-jest",
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{js,vue}",
+      "!**/node_modules/**"
+    ]
+  },
+  "env": {
+    "test": {
+      "plugin": [
+        "transform-es2015-module-commonjs"
+      ]
+    }
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "presets": [
+          "@babel/preset-env"
+        ]
+      }
+    }
+  }
